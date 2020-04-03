@@ -1,0 +1,14 @@
+{
+  "name": "Tracker",
+  "version": "1.0",
+  "description": "see how you spend your time on the web",
+  "permissions":["tabs","storage","alarms"],
+  "background": {
+      "scripts": ["background.js"],
+      "persistent": true
+    },
+  "browser_action": {
+      "default_popup": "popup.html"
+    },
+  "manifest_version": 2
+}
