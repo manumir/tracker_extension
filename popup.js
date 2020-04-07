@@ -1,5 +1,4 @@
 chrome.runtime.sendMessage({msg: "send urls and times"}, function(response) {
-  //alert('urls: '+response.urls+'\ntimes: '+response.times);
   for (var i = 0; i < response.urls.length; i++) {
   	response.urls[i]
   	var p = document.createElement("p");
