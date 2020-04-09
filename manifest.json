@@ -2,7 +2,7 @@
   "name": "Tracker",
   "version": "1.0",
   "description": "see how you spend your time on the web",
-  "permissions":["tabs","alarms"],
+  "permissions":["tabs"],
   "background": {
       "scripts": ["background.js"],
       "persistent": true

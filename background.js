@@ -31,20 +31,22 @@ chrome.tabs.onActivated.addListener(function() {
   });
 });
 
-chrome.tabs.onUpdated.addListener(function(){
-  chrome.tabs.query({'active': true, 'currentWindow': true}, function (tabs){
-    if (DONT_WRITE_NEXT_FLAG == 0){
-      write2map(tabs,map);
-      console.log('1');
-    } else {
-        DONT_WRITE_NEXT_FLAG = 0;
-        console.log('did not write');
-      }
-    console.log(map);
-    lurl=tabs[0].url;
-    start = Date.now();
-    url_in_flag=0;
-  });
+chrome.tabs.onUpdated.addListener(function(tabID,props){
+  //if (props.status == 'complete'){
+    chrome.tabs.query({'active': true, 'currentWindow': true}, function (tabs){
+      if (DONT_WRITE_NEXT_FLAG == 0){
+        write2map(tabs,map);
+        console.log('1');
+      } else {
+          DONT_WRITE_NEXT_FLAG = 0;
+          console.log('did not write');
+        }
+      console.log(map);
+      lurl=tabs[0].url;
+      start = Date.now();
+      url_in_flag=0;
+    });
+  //}
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -56,6 +58,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                   times: Array.from(map.values())});
   }
 });
+
 function write2map(tabs,map){
   for(url of map.keys()){
     if(url == tabs[0].url && url_in_flag == 0){

@@ -1,0 +1,8 @@
+errors:
+1-when uptaded and before its complete its changed
+changed to another tab which is zerod, the tab which
+was updated is zerod plus the time spent on the other tab.
+
+possible fix:
+when changed to another tab, write to map even if
+tab is being updated
