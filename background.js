@@ -21,7 +21,7 @@ chrome.tabs.onActivated.addListener(function() {
 
 chrome.tabs.onUpdated.addListener(function(tabid,props,tab){
   //if (props.status == 'complete'){
-  if (tab.url != undefined){
+  if (tab.url != undefined && tab.highlighted == true){ // THE "tab.highlighted" FIXES THE ERROR ON notes.txt
     lurl=getRootUrl(tab.url) // or = props.url (both have a .url attribute)
   }
   //}
