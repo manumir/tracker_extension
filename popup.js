@@ -1,4 +1,3 @@
-setInterval(function () {
 chrome.runtime.sendMessage({msg: "send urls and times"}, function(response) {
   for (var i = 0; i < response.urls.length; i++) {
 	if (response.urls[i] != (undefined || "")){
@@ -19,4 +18,3 @@ chrome.runtime.sendMessage({msg: "send urls and times"}, function(response) {
 	}
   }
 });
-}, 1000);

@@ -1,14 +1,13 @@
 errors:
 
-possible fix:
--when changed to another tab, write to map even if
- tab is being updated
--easy fix is at the start get all urls and set them to zero,
- and also add the newtab and set it to zero (maybe doesn't cover
- clicking on links and updating current tab)
 
 fixed:
 1-when uptaded and before its complete and changed
  to another tab which maybe is (zerod or isn't on the map), the tab which
  was updated is zerod plus the time spent on the other tab(which probably
  is zero.
+
+# to do:
+- check which version is better
+- add css and pretty things to popup.html and popup.js
+- check both version for possible errors
