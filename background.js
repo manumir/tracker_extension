@@ -6,7 +6,6 @@ chrome.tabs.onActivated.addListener(function() {
   chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
     write2map(map);
     lurl=getRootUrl(tabs[0].url);
-    start = Date.now();
   });
 });
 
@@ -15,7 +14,6 @@ chrome.tabs.onUpdated.addListener(function(tabID,props,tab){
   if (tab.url != undefined && tab.highlighted == true){  
     write2map(map);
     lurl=getRootUrl(tab.url);
-    start = Date.now();
   }
   //}
 });
@@ -23,7 +21,6 @@ chrome.tabs.onUpdated.addListener(function(tabID,props,tab){
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.msg == "send urls and times"){
     write2map(map);
-    start = Date.now();
     map1=sortt(map);
     sendResponse({urls: Array.from(map1.keys()),
                   times: Array.from(map1.values())});
@@ -40,15 +37,18 @@ chrome.tabs.query({'currentWindow': true},function(tabs) {
   }
 });
 
+// start counting on the tab the browser starts
 chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
   lurl=getRootUrl(tabs[0].url);
   start = Date.now();
 });
 
 // don't write to map if machine is idle
-chrome.idle.setDetectionInterval(300);
+chrome.idle.setDetectionInterval(180);
 chrome.idle.onStateChanged.addListener(function (new_state){
   if (new_state != "active"){
+    write2map(map);
+    console.log(map);
     DONT_WRITE_NEXT_FLAG = 1;
     console.log("not active");
   }
@@ -62,6 +62,8 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
   chrome.windows.getCurrent(function(_window){
     state=_window.state;
     console.log('changed to '+ window.state);
+    write2map(map);
+    console.log(map);
     if (state == 'minimized'){
       DONT_WRITE_NEXT_FLAG = 1;
     }
@@ -80,6 +82,7 @@ function write2map(map){
     DONT_WRITE_NEXT_FLAG = 0;
     console.log('did not write');
   }
+  start = Date.now();
 }
 
 function sortt(map_arg){

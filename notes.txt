@@ -8,6 +8,7 @@ fixed:
  is zero.
 
 # to do:
+. don't count when window is not minimized but not visible
 - check which version is better
 - add css and pretty things to popup.html and popup.js
 - check both version for possible errors
