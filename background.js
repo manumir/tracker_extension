@@ -2,6 +2,7 @@ var start, state, lurl;
 var map = new Map();
 var DONT_WRITE_NEXT_FLAG=0;
 
+// on tab changed, write
 chrome.tabs.onActivated.addListener(function() {
   chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
     write2map(map);
@@ -9,6 +10,7 @@ chrome.tabs.onActivated.addListener(function() {
   });
 });
 
+// on url change, write
 chrome.tabs.onUpdated.addListener(function(tabID,props,tab){
   //if (props.status == 'complete'){
   if (tab.url != undefined && tab.highlighted == true){  
@@ -44,26 +46,35 @@ chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
 });
 
 // don't write to map if machine is idle
-chrome.idle.setDetectionInterval(180);
+chrome.idle.setDetectionInterval(300);
 chrome.idle.onStateChanged.addListener(function (new_state){
   if (new_state != "active"){
     write2map(map);
-    console.log(map);
     DONT_WRITE_NEXT_FLAG = 1;
-    console.log("not active");
   }
   else{
     DONT_WRITE_NEXT_FLAG = 0;
   }
 });
 
+// don't write if window is not focused (e.g. if not on screen) for >10 seconds
+setInterval(function(){
+  chrome.windows.getLastFocused(function(_window) {
+    if (_window.focused == false){
+      write2map(map);
+      DONT_WRITE_NEXT_FLAG = 1;
+    }
+    else {
+      DONT_WRITE_NEXT_FLAG = 0;
+    }
+  });
+}, 10000);
+
 // don't write if it is minimized
 chrome.windows.onFocusChanged.addListener(function(windowId) {
-  chrome.windows.getCurrent(function(_window){
+  chrome.windows.getLastFocused(function(_window) {
     state=_window.state;
-    console.log('changed to '+ window.state);
     write2map(map);
-    console.log(map);
     if (state == 'minimized'){
       DONT_WRITE_NEXT_FLAG = 1;
     }
