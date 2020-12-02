@@ -13,10 +13,10 @@ chrome.tabs.onActivated.addListener(function() {
 // on url change, write
 chrome.tabs.onUpdated.addListener(function(tabID,props,tab){
   //if (props.status == 'complete'){
-  if (tab.url != undefined && tab.highlighted == true){  
-    write2map(map);
-    lurl=getRootUrl(tab.url);
-  }
+		if (tab.url != undefined && tab.highlighted == true){
+			write2map(map);
+			lurl=getRootUrl(tab.url);
+		}
   //}
 });
 
@@ -46,14 +46,12 @@ chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
 });
 
 // don't write to map if machine is idle
-chrome.idle.setDetectionInterval(300);
+chrome.idle.setDetectionInterval(240);
 chrome.idle.onStateChanged.addListener(function (new_state){
+	write2map(map);
   if (new_state != "active"){
-    write2map(map);
+		console.log(1);
     DONT_WRITE_NEXT_FLAG = 1;
-  }
-  else{
-    DONT_WRITE_NEXT_FLAG = 0;
   }
 });
 
@@ -61,11 +59,9 @@ chrome.idle.onStateChanged.addListener(function (new_state){
 setInterval(function(){
   chrome.windows.getLastFocused(function(_window) {
     if (_window.focused == false){
-      write2map(map);
+			write2map(map);
+			console.log(3);
       DONT_WRITE_NEXT_FLAG = 1;
-    }
-    else {
-      DONT_WRITE_NEXT_FLAG = 0;
     }
   });
 }, 10000);
@@ -74,8 +70,9 @@ setInterval(function(){
 chrome.windows.onFocusChanged.addListener(function(windowId) {
   chrome.windows.getLastFocused(function(_window) {
     state=_window.state;
-    write2map(map);
+		write2map(map);
     if (state == 'minimized'){
+			console.log(2);
       DONT_WRITE_NEXT_FLAG = 1;
     }
   });
@@ -84,8 +81,10 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 function write2map(map){
   if (DONT_WRITE_NEXT_FLAG == 0 && start != undefined && lurl != undefined){
       if (map.get(lurl) != null){
+				console.log(lurl+","+String(Date.now()-start)/1000);
         map.set(lurl,Number(map.get(lurl)) + (Date.now()-start)/1000);
-      } else {
+      }
+			else {
         map.set(lurl,(Date.now()-start)/1000);
       }
   }
