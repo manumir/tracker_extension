@@ -50,7 +50,7 @@ chrome.idle.setDetectionInterval(240);
 chrome.idle.onStateChanged.addListener(function (new_state){
 	write2map(map);
   if (new_state != "active"){
-		console.log(1);
+		//console.log(1);
     DONT_WRITE_NEXT_FLAG = 1;
   }
 });
@@ -60,19 +60,19 @@ setInterval(function(){
   chrome.windows.getLastFocused(function(_window) {
     if (_window.focused == false){
 			write2map(map);
-			console.log(3);
+			//console.log(3);
       DONT_WRITE_NEXT_FLAG = 1;
     }
   });
-}, 10000);
+}, 1000);
 
 // don't write if it is minimized
 chrome.windows.onFocusChanged.addListener(function(windowId) {
   chrome.windows.getLastFocused(function(_window) {
     state=_window.state;
-		write2map(map);
+    write2map(map);
     if (state == 'minimized'){
-			console.log(2);
+			//console.log(2);
       DONT_WRITE_NEXT_FLAG = 1;
     }
   });
