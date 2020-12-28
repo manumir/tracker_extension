@@ -49,6 +49,7 @@ chrome.tabs.query({'active': true, 'currentWindow': true},function(tabs) {
 chrome.idle.setDetectionInterval(240);
 chrome.idle.onStateChanged.addListener(function (new_state){
 	write2map(map);
+	alert('pc is idle '+Date());
   if (new_state != "active"){
 		//console.log(1);
     DONT_WRITE_NEXT_FLAG = 1;
